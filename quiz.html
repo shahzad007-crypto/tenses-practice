@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Jumbled Sentences Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .instructions {
+      margin-bottom: 20px;
+    }
+    .grade-box {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: green;
+    }
+    .sentence-box {
+      margin-bottom: 15px;
+    }
+    .feedback {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    .error {
+      color: red;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Jumbled Sentences Quiz</h2>
+  <div class="instructions">
+    Rearrange the jumbled words below into coherent sentences. Type your answers in the blank spaces provided. You have one attempt only.
+  </div>
+
+  <!-- Grade Display -->
+  <div class="grade-box" id="grade-box" style="display: none;">
+    Your grade: <span id="grade">0</span>/20
+  </div>
+
+  <!-- Error Message -->
+  <div class="error" id="error-message" style="display: none;">Please fill in all the answers before submitting.</div>
+
+  <!-- Sentence Inputs -->
+  <div id="quiz-container"></div>
+
+  <!-- Submit Button -->
+  <button id="submit-button" onclick="checkAnswers()">Submit All Answers</button>
+
+  <script>
+    // Correct Answers and Jumbled Words
+    const sentences = [
+      { number: 1, jumbled: "every morning / my emails / check / I", correct: "I check my emails every morning." },
+      { number: 2, jumbled: "right now / an important email / writing / is / She", correct: "She is writing an important email right now." },
+      { number: 3, jumbled: "yesterday / He / replied / client / to the", correct: "He replied to the client yesterday." },
+      { number: 4, jumbled: "tomorrow / We / will send / the report", correct: "We will send the report tomorrow." },
+      { number: 5, jumbled: "already / confirmation / received / They / have / the", correct: "They have received the confirmation already." },
+      { number: 6, jumbled: "when you called / reading / was / your email / I", correct: "I was reading your email when you called." },
+      { number: 7, jumbled: "this time tomorrow / reviewing / By / feedback / will be / the / I", correct: "By this time tomorrow, I will be reviewing the feedback." },
+      { number: 8, jumbled: "since Monday / reply / been waiting / has / your / for / She", correct: "She has been waiting for your reply since Monday." },
+      { number: 9, jumbled: "before the meeting / had sent / instructions / manager / The", correct: "The manager had sent the instructions before the meeting." },
+      { number: 10, jumbled: "next week / completed / will have / project / we / By / the", correct: "By next week, we will have completed the project." },
+      { number: 11, jumbled: "can attach / You / document / the / to the email", correct: "You can attach the document to the email." },
+      { number: 12, jumbled: "confirm / should / details / the / before sending / We", correct: "We should confirm the details before sending." },
+      { number: 13, jumbled: "reviewed / being / email / is / The / by the team", correct: "The email is being reviewed by the team." },
+      { number: 14, jumbled: "approved / proposal / director / was / The / by the", correct: "The proposal was approved by the director." },
+      { number: 15, jumbled: "reply quickly / they / If you / it / appreciate / will", correct: "If you reply quickly, they will appreciate it." },
+      { number: 16, jumbled: "were you / double-check / attachment / would / If I / I / the", correct: "If I were you, I would double-check the attachment." },
+      { number: 17, jumbled: "Please / file / updated / as soon as possible / the / send", correct: "Please send the updated file as soon as possible." },
+      { number: 18, jumbled: "Thank you / appointment / confirming / for / the", correct: "Thank you for confirming the appointment." },
+      { number: 19, jumbled: "important / proofread / It is / to / your emails", correct: "It is important to proofread your emails." },
+      { number: 20, jumbled: "finished / he / draft / decided / Although / revise / had / it again / the / to", correct: "Although he had finished the draft, he decided to revise it again." }
+    ];
+
+    // Dynamically Generate Input Fields
+    const quizContainer = document.getElementById("quiz-container");
+    sentences.forEach((sentence, index) => {
+      const sentenceBox = document.createElement("div");
+      sentenceBox.className = "sentence-box";
+      sentenceBox.innerHTML = `
+        <p><strong>${sentence.number}.</strong> ${sentence.jumbled}</p>
+        <input type="text" id="sentence-${index}" placeholder="Type your answer here">
+      `;
+      quizContainer.appendChild(sentenceBox);
+    });
+
+    // Function to Check Answers
+    function checkAnswers() {
+      const errorDiv = document.getElementById("error-message");
+      const gradeBox = document.getElementById("grade-box");
+      const gradeSpan = document.getElementById("grade");
+      const submitButton = document.getElementById("submit-button");
+
+      // Reset feedback and error messages
+      errorDiv.style.display = "none";
+      gradeBox.style.display = "none";
+
+      // Check if all fields are filled
+      let allFilled = true;
+      sentences.forEach((_, index) => {
+        const userAnswer = document.getElementById(`sentence-${index}`).value.trim();
+        if (!userAnswer) {
+          allFilled = false;
+        }
+      });
+
+      // If not all fields are filled, show error message
+      if (!allFilled) {
+        errorDiv.style.display = "block";
+        return;
+      }
+
+      // Calculate correct answers
+      let correctCount = 0;
+      sentences.forEach((sentence, index) => {
+        const userAnswer = document.getElementById(`sentence-${index}`).value.trim();
+        if (userAnswer === sentence.correct) {
+          correctCount++;
+        }
+      });
+
+      // Display grade
+      gradeSpan.textContent = correctCount;
+      gradeBox.style.display = "block";
+
+      // Disable input fields and submit button after one attempt
+      sentences.forEach((_, index) => {
+        document.getElementById(`sentence-${index}`).disabled = true;
+      });
+      submitButton.disabled = true;
+    }
+  </script>
+</body>
+</html>
